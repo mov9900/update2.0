@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Management System - AutoLib Ecosystem</title>
+    <link rel="stylesheet" href="main.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+
+<body class="bg-background min-h-screen">
+    <!-- Desktop Sidebar -->
+    <div class="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
+        <div class="flex min-h-0 flex-1 flex-col bg-primary">
+            <!-- Logo Section -->
+            <div class="flex h-16 flex-shrink-0 items-center px-4">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-book-open text-primary text-lg"></i>
+                    </div>
+                    <h1 class="text-white text-lg font-semibold">Edushelf</h1>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="mt-5 flex-1 space-y-1 px-2">
+                <a href="dashboard.html"
+                    class="text-primary-100 hover:bg-primary-600 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors">
+                    <i class="fas fa-chart-line mr-3 text-white"></i>
+                    Dashboard
+                </a>
+                <a href="book.html"
+                    class="bg-primary-600 text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                    <i class="fas fa-book mr-3 text-primary-200 group-hover:text-white"></i>
+                    BOOKS
+                </a>
+                <a href="index.html"
+                    class="text-primary-100 hover:bg-primary-600 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors">
+                    <i class="fas fa-sign-out-alt text-xl mr-3 text-primary-200 group-hover:text-white"></i>
+                    LOGOUT
+                </a>
+            </nav>
+
+
+            <!-- User Profile -->
+            <div class="flex flex-shrink-0 p-4">
+                <div class="flex items-center">
+                    <img class="inline-block h-9 w-9 rounded-full"
+                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        alt="User avatar"
+                        onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;" />
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-white">Aamir</p>
+                        <p class="text-xs font-medium text-primary-200">Librarian</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div class="lg:hidden">
+        <!-- Mobile Header -->
+        <div class="flex items-center justify-between bg-primary px-4 py-3">
+            <div class="flex items-center">
+                <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-3">
+                    <i class="fas fa-book-open text-primary text-lg"></i>
+                </div>
+                <h1 class="text-white text-lg font-semibold">Edushelf</h1>
+            </div>
+            <button id="mobileMenuBtn" class="text-white">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobileMenu" class="fixed inset-0 z-50 hidden">
+            <div class="fixed inset-0 bg-black bg-opacity-50" id="mobileMenuOverlay"></div>
+            <div class="fixed inset-y-0 left-0 w-64 bg-primary transform -translate-x-full transition-transform duration-300"
+                id="mobileMenuPanel">
+                <div class="flex items-center justify-between p-4 border-b border-primary-600">
+                    <h2 class="text-white text-lg font-semibold">Menu</h2>
+                    <button id="closeMobileMenu" class="text-white">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <nav class="mt-5 space-y-1 px-2">
+                    <a href="dashboard.html"
+                        class="text-primary-100 hover:bg-primary-600 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors">
+                        <i class="fas fa-chart-line mr-3"></i>
+                        Dashboard
+                    </a>
+                    <a href="book.html"
+                        class="bg-primary-600 text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-book mr-3"></i>
+                        BOOKS
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="lg:pl-64">
+        <div class="flex flex-col">
+            <!-- Header -->
+            <header class="bg-white shadow-sm border-b border-gray-200">
+                <div class="px-4 sm:px-6 lg:px-8">
+                    <div class="flex h-16 items-center justify-between">
+                        <div class="flex items-center">
+                            <h1 class="text-2xl font-semibold text-gray-900">Book Management System</h1>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <button class="p-2 text-gray-400 hover:text-gray-500 transition-colors"
+                                id="openScannerBtn">
+                                <i class="fas fa-barcode text-xl"></i>
+                            </button>
+                            <button
+                                class="bg-primary hover:bg-primary-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                                id="openAddBookBtn">
+                                <i class="fas fa-plus mr-2"></i>
+                                Add Book
+                            </button>
+                            <a href="index.html" class="p-2 text-gray-400 hover:text-gray-500 transition-colors">
+                                <i class="fas fa-sign-out-alt text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Book Management Content -->
+            <main class="flex-1 pb-8">
+                <div class="px-4 sm:px-6 lg:px-8 py-8">
+
+                    <!-- Search and Filter Bar -->
+                    <div class="bg-white rounded-xl shadow-custom border border-gray-200 p-6 mb-8">
+                        <div
+                            class="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0 lg:space-x-6">
+                            <!-- Search Bar -->
+                            <div class="flex-1 max-w-lg">
+                                <div class="relative">
+                                    <input type="text" id="searchInput"
+                                        class="w-full px-4 py-3 pl-11 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                        placeholder="Search by title, author, or branch..." />
+                                    <i
+                                        class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                </div>
+                            </div>
+
+                            <!-- Filters -->
+                            <div class="flex space-x-4">
+                                <select id="branchFilter"
+                                    class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                    <option value>All Branch</option>
+                                    <option value="ECE">ECE</option>
+                                    <option value="ME">ME</option>
+                                    <option value="EE">EE</option>
+                                    <option value="CE">CE</option>
+                                    <option value="IT">IT</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Books Grid and Details Section -->
+                    <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                        <!-- Books Grid -->
+                        <div class="xl:col-span-2">
+                            <div class="bg-white rounded-xl shadow-custom border border-gray-200">
+                                <!-- Grid Header -->
+                                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                                    <div class="flex items-center space-x-4">
+                                        <h3 class="text-lg font-semibold text-gray-900">Books Collection</h3>
+                                        <!-- <span class="px-3 py-1 bg-primary-100 text-primary-700 text-sm font-medium rounded-full">1,248 books</span> -->
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <button id="gridView" class="p-2 text-primary bg-primary-100 rounded-lg">
+                                            <i class="fas fa-th-large"></i>
+                                        </button>
+                                        <button id="listView" class="p-2 text-gray-400 hover:text-gray-600 rounded-lg">
+                                            <i class="fas fa-list"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Books Grid Content -->
+                                <div class="p-6">
+                                    <div id="booksGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        <!-- Book Card 1 -->
+                                        <div class="book-card bg-gray-50 rounded-lg p-4 hover:shadow-md transition-all cursor-pointer border-2 border-transparent hover:border-primary-200"
+                                            data-book-id="1">
+                                            <div
+                                                class="w-full h-32 bg-gradient-to-br from-primary-400 to-primary-600 rounded-md mb-3 flex items-center justify-center">
+                                                <i class="fas fa-book-open text-white text-2xl"></i>
+                                            </div>
+                                            <h4 class="font-semibold text-gray-900 text-sm mb-1 truncate">The Art of
+                                                Computer Programming</h4>
+                                            <p class="text-xs text-gray-600 mb-2">Donald Knuth</p>
+                                            <div class="flex items-center justify-between">
+                                                <!-- <span class="text-xs text-gray-500">ISBN: 9780201038019</span>
+                                                <span class="px-2 py-1 bg-success-100 text-success-700 text-xs rounded-full">Available</span> -->
+                                            </div>
+                                            <div class="mt-2 flex items-center justify-between text-xs text-gray-500">
+                                                <span>ECE</span>
+                                                <!-- <span>Borrowed 24x</span> -->
+                                            </div>
+                                        </div>
+
+                                        <!-- Book Card 2 -->
+                                        <div class="book-card bg-gray-50 rounded-lg p-4 hover:shadow-md transition-all cursor-pointer border-2 border-transparent hover:border-primary-200"
+                                            data-book-id="2">
+                                            <div
+                                                class="w-full h-32 bg-gradient-to-br from-secondary-400 to-secondary-600 rounded-md mb-3 flex items-center justify-center">
+                                                <i class="fas fa-book text-white text-2xl"></i>
+                                            </div>
+                                            <h4 class="font-semibold text-gray-900 text-sm mb-1 truncate">Clean Code
+                                            </h4>
+                                            <p class="text-xs text-gray-600 mb-2">Robert C. Martin</p>
+                                            <div class="flex items-center justify-between">
+                                                <!-- <span class="text-xs text-gray-500">ISBN: 9780132350884</span>
+                                                <span class="px-2 py-1 bg-warning-100 text-warning-700 text-xs rounded-full">Borrowed</span> -->
+                                            </div>
+                                            <div class="mt-2 flex items-center justify-between text-xs text-gray-500">
+                                                <span>CE</span>
+                                                <!-- <span>Borrowed 18x</span> -->
+                                            </div>
+                                        </div>
+
+                                        <!-- Book Card 3 -->
+                                        <div class="book-card bg-gray-50 rounded-lg p-4 hover:shadow-md transition-all cursor-pointer border-2 border-transparent hover:border-primary-200"
+                                            data-book-id="3">
+                                            <div
+                                                class="w-full h-32 bg-gradient-to-br from-accent-400 to-accent-600 rounded-md mb-3 flex items-center justify-center">
+                                                <i class="fas fa-book text-white text-2xl"></i>
+                                            </div>
+                                            <h4 class="font-semibold text-gray-900 text-sm mb-1 truncate">Introduction
+                                                to Algorithms</h4>
+                                            <p class="text-xs text-gray-600 mb-2">Thomas H. Cormen</p>
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-xs text-gray-500">ISBN: 9780262033848</span>
+                                                <span
+                                                    class="px-2 py-1 bg-success-100 text-success-700 text-xs rounded-full">Available</span>
+                                            </div>
+                                            <div class="mt-2 flex items-center justify-between text-xs text-gray-500">
+                                                <span>EE</span>
+                                                <span>Borrowed 31x</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Book Card 4 -->
+                                        <div class="book-card bg-gray-50 rounded-lg p-4 hover:shadow-md transition-all cursor-pointer border-2 border-transparent hover:border-primary-200"
+                                            data-book-id="4">
+                                            <div
+                                                class="w-full h-32 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-md mb-3 flex items-center justify-center">
+                                                <i class="fas fa-book-open text-white text-2xl"></i>
+                                            </div>
+                                            <h4 class="font-semibold text-gray-900 text-sm mb-1 truncate">Design
+                                                Patterns</h4>
+                                            <p class="text-xs text-gray-600 mb-2">Gang of Four</p>
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-xs text-gray-500">ISBN: 9780201633612</span>
+                                                <span
+                                                    class="px-2 py-1 bg-error-100 text-error-700 text-xs rounded-full">Maintenance</span>
+                                            </div>
+                                            <div class="mt-2 flex items-center justify-between text-xs text-gray-500">
+                                                <span>CE</span>
+                                                <span>Borrowed 15x</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Book Card 5 -->
+                                        <div class="book-card bg-gray-50 rounded-lg p-4 hover:shadow-md transition-all cursor-pointer border-2 border-transparent hover:border-primary-200"
+                                            data-book-id="5">
+                                            <div
+                                                class="w-full h-32 bg-gradient-to-br from-secondary-400 to-accent-500 rounded-md mb-3 flex items-center justify-center">
+                                                <i class="fas fa-book text-white text-2xl"></i>
+                                            </div>
+                                            <h4 class="font-semibold text-gray-900 text-sm mb-1 truncate">Sapiens</h4>
+                                            <p class="text-xs text-gray-600 mb-2">Yuval Noah Harari</p>
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-xs text-gray-500">ISBN: 9780062316097</span>
+                                                <span
+                                                    class="px-2 py-1 bg-primary-100 text-primary-700 text-xs rounded-full">Reserved</span>
+                                            </div>
+                                            <div class="mt-2 flex items-center justify-between text-xs text-gray-500">
+                                                <span>IT</span>
+                                                <span>Borrowed 42x</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Book Card 6 -->
+                                        <div class="book-card bg-gray-50 rounded-lg p-4 hover:shadow-md transition-all cursor-pointer border-2 border-transparent hover:border-primary-200"
+                                            data-book-id="6">
+                                            <div
+                                                class="w-full h-32 bg-gradient-to-br from-accent-400 to-primary-500 rounded-md mb-3 flex items-center justify-center">
+                                                <i class="fas fa-book-open text-white text-2xl"></i>
+                                            </div>
+                                            <h4 class="font-semibold text-gray-900 text-sm mb-1 truncate">The Pragmatic
+                                                Programmer</h4>
+                                            <p class="text-xs text-gray-600 mb-2">David Thomas</p>
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-xs text-gray-500">ISBN: 9780201616224</span>
+                                                <span
+                                                    class="px-2 py-1 bg-success-100 text-success-700 text-xs rounded-full">Available</span>
+                                            </div>
+                                            <div class="mt-2 flex items-center justify-between text-xs text-gray-500">
+                                                <span>CE</span>
+                                                <span>Borrowed 27x</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Load More Button -->
+                                    <div class="text-center mt-6">
+                                        <button
+                                            class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors">
+                                            <i class="fas fa-chevron-down mr-2"></i>
+                                            Load More Books
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel - Book Details -->
+                        <div class="space-y-6">
+                            <!-- Selected Book Details -->
+                            <div id="bookDetails" class="bg-white rounded-xl shadow-custom border border-gray-200 p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-4">Book Details</h3>
+                                <div id="noSelection" class="text-center py-8">
+                                    <i class="fas fa-book text-gray-300 text-4xl mb-4"></i>
+                                    <p class="text-gray-500">Select a book to view details</p>
+                                </div>
+                                <div id="selectedBook" class="hidden">
+                                    <div
+                                        class="w-full h-48 bg-gradient-to-br from-primary-400 to-primary-600 rounded-lg mb-4 flex items-center justify-center">
+                                        <i class="fas fa-book-open text-white text-4xl"></i>
+                                    </div>
+                                    <h4 id="bookTitle" class="text-lg font-semibold text-gray-900 mb-2"></h4>
+                                    <p id="bookAuthor" class="text-gray-600 mb-4"></p>
+                                    <div class="space-y-3">
+                                        <div class="flex justify-between">
+                                            <span class="text-sm text-gray-500">ISBN:</span>
+                                            <span id="bookISBN" class="text-sm font-medium text-gray-900"></span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-sm text-gray-500">Department:</span>
+                                            <span id="bookDepartment" class="text-sm font-medium text-gray-900"></span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-sm text-gray-500">Status:</span>
+                                            <span id="bookStatus" class="text-sm font-medium"></span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-sm text-gray-500">Times Borrowed:</span>
+                                            <span id="bookBorrowed" class="text-sm font-medium text-gray-900"></span>
+                                        </div>
+                                    </div>
+                                    <div class="mt-6 space-y-2">
+                                        <button
+                                            class="w-full bg-primary hover:bg-primary-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                                            <i class="fas fa-edit mr-2"></i>
+                                            Edit Details
+                                        </button>
+                                        <button
+                                            class="w-full bg-secondary hover:bg-secondary-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                                            <i class="fas fa-IT mr-2"></i>
+                                            View IT
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bulk Operations -->
+                            <!-- <div class="bg-white rounded-xl shadow-custom border border-gray-200 p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-4">Bulk Operations</h3>
+                                <div class="space-y-3">
+                                    <button class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center">
+                                        <i class="fas fa-check-square mr-2"></i>
+                                        Select Multiple Books
+                                    </button>
+                                    <button class="w-full bg-warning hover:bg-warning-600 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center">
+                                        <i class="fas fa-tags mr-2"></i>
+                                        Update Categories
+                                    </button>
+                                    <button class="w-full bg-success hover:bg-success-600 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center">
+                                        <i class="fas fa-download mr-2"></i>
+                                        Export Data
+                                    </button>
+                                </div>
+                            </div> -->
+
+                            <!-- Quick Stats -->
+                            <!-- <div class="bg-gradient-to-br from-secondary-50 to-secondary-100 rounded-xl border border-secondary-200 p-6">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Stats</h3>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">Available Books</span>
+                                        <span class="text-sm font-semibold text-success">982</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">Books on Loan</span>
+                                        <span class="text-sm font-semibold text-warning">231</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">Reserved Books</span>
+                                        <span class="text-sm font-semibold text-primary">24</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">Under Maintenance</span>
+                                        <span class="text-sm font-semibold text-error">11</span>
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2">
+        <div class="flex justify-around">
+            <a href="dashboard.html" class="flex flex-col items-center py-2 text-gray-400">
+                <i class="fas fa-chart-line text-lg"></i>
+                <span class="text-xs mt-1">Summary</span>
+            </a>
+            <a href="book.html" class="flex flex-col items-center py-2 text-primary">
+                <i class="fas fa-book text-lg"></i>
+                <span class="text-xs mt-1">Books</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Barcode Scanner Modal -->
+    <div id="barcodeModal" class="fixed inset-0 z-50 hidden">
+        <div class="fixed inset-0 bg-black bg-opacity-50" id="barcodeModalOverlay"></div>
+        <div class="fixed inset-0 flex items-center justify-center p-4">
+            <div class="bg-white rounded-xl p-6 max-w-md w-full">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Barcode Scanner</h3>
+                    <button id="closeBarcodeModal" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div class="bg-gray-100 h-48 rounded-lg flex items-center justify-center mb-4">
+                    <div id="scannerContainer" class="w-full h-full flex items-center justify-center"></div>
+                </div>
+                <p class="text-sm text-gray-600 text-center">Position the barcode within the frame to scan</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Book Modal -->
+    <div id="addBookModal" class="fixed inset-0 z-50 hidden">
+        <div class="fixed inset-0 bg-black bg-opacity-50" id="addBookModalOverlay"></div>
+        <div class="fixed inset-0 flex items-center justify-center p-4">
+            <div class="bg-white rounded-xl p-6 max-w-2xl w-full max-h-screen overflow-y-auto">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900">Add New Book</h3>
+                    <button id="closeAddBookModal" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+
+                <form class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                            <input type="text"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                placeholder="Enter book title" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Author</label>
+                            <input type="text"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                placeholder="Enter author name" />
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">ISBN</label>
+                            <input type="text"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                placeholder="Enter ISBN" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Department</label>
+                            <select
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option value>Select Department</option>
+                                <option value="ECE">ECE</option>
+                                <option value="ME">ME</option>
+                                <option value="EE">EE</option>
+                                <option value="CE">CE</option>
+                                <option value="IT">IT</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                        <textarea rows="3"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                            placeholder="Enter book description"></textarea>
+                    </div>
+
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" id="cancelAddBook"
+                            class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">Cancel</button>
+                        <button type="submit"
+                            class="px-6 py-3 bg-primary hover:bg-primary-600 text-white rounded-lg transition-colors">Add
+                            Book</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="barcode_scanner.js"></script>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuPanel = document.getElementById('mobileMenuPanel');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+        const closeMobileMenu = document.getElementById('closeMobileMenu');
+
+        function openMobileMenu() {
+            mobileMenu.classList.remove('hidden');
+            setTimeout(() => {
+                mobileMenuPanel.classList.remove('-translate-x-full');
+            }, 10);
+        }
+
+        function closeMobileMenuFunc() {
+            mobileMenuPanel.classList.add('-translate-x-full');
+            setTimeout(() => {
+                mobileMenu.classList.add('hidden');
+            }, 300);
+        }
+
+        mobileMenuBtn.addEventListener('click', openMobileMenu);
+        closeMobileMenu.addEventListener('click', closeMobileMenuFunc);
+        mobileMenuOverlay.addEventListener('click', closeMobileMenuFunc);
+
+        // Barcode Scanner Modal
+
+
+
+        // Add Book Modal
+        // const addBookBtn = document.getElementById('addBookBtn');
+        // const addBookModal = document.getElementById('addBookModal');
+        // const addBookModalOverlay = document.getElementById('addBookModalOverlay');
+        // const closeAddBookModal = document.getElementById('closeAddBookModal');
+        // const cancelAddBook = document.getElementById('cancelAddBook');
+
+        // addBookBtn.addEventListener('click', () => {
+        //     addBookModal.classList.remove('hidden');
+        // });
+
+        // closeAddBookModal.addEventListener('click', () => {
+        //     addBookModal.classList.add('hidden');
+        // });
+
+        // cancelAddBook.addEventListener('click', () => {
+        //     addBookModal.classList.add('hidden');
+        // });
+
+        // addBookModalOverlay.addEventListener('click', () => {
+        //     addBookModal.classList.add('hidden');
+        // });
+
+        // Book Selection Logic
+        const bookCards = document.querySelectorAll('.book-card');
+        const noSelection = document.getElementById('noSelection');
+        const selectedBook = document.getElementById('selectedBook');
+        const bookTitle = document.getElementById('bookTitle');
+        const bookAuthor = document.getElementById('bookAuthor');
+        const bookISBN = document.getElementById('bookISBN');
+        const bookDepartment = document.getElementById('bookDepartment');
+        const bookStatus = document.getElementById('bookStatus');
+        const bookBorrowed = document.getElementById('bookBorrowed');
+
+        const bookData = {
+            1: {
+                title: 'The Art of Computer Programming',
+                author: 'Donald Knuth',
+                isbn: '9780201038019',
+                Department: 'CE',
+                status: 'Available',
+                borrowed: '24x',
+                statusClass: 'bg-success-100 text-success-700'
+            },
+            2: {
+                title: 'Clean Code',
+                author: 'Robert C. Martin',
+                isbn: '9780132350884',
+                Department: 'CE',
+                status: 'Borrowed',
+                borrowed: '18x',
+                statusClass: 'bg-warning-100 text-warning-700'
+            },
+            3: {
+                title: 'Introduction to Algorithms',
+                author: 'Thomas H. Cormen',
+                isbn: '9780262033848',
+                Department: 'EE',
+                status: 'Available',
+                borrowed: '31x',
+                statusClass: 'bg-success-100 text-success-700'
+            },
+            4: {
+                title: 'Design Patterns',
+                author: 'Gang of Four',
+                isbn: '9780201633612',
+                Department: 'CE',
+                status: 'Maintenance',
+                borrowed: '15x',
+                statusClass: 'bg-error-100 text-error-700'
+            },
+            5: {
+                title: 'Sapiens',
+                author: 'Yuval Noah Harari',
+                isbn: '9780062316097',
+                Department: 'IT',
+                status: 'Reserved',
+                borrowed: '42x',
+                statusClass: 'bg-primary-100 text-primary-700'
+            },
+            6: {
+                title: 'The Pragmatic Programmer',
+                author: 'David Thomas',
+                isbn: '9780201616224',
+                Department: 'CE',
+                status: 'Available',
+                borrowed: '27x',
+                statusClass: 'bg-success-100 text-success-700'
+            }
+        };
+
+        // document.addEventListener("DOMContentLoaded", () => {
+        //     const barcodeModal = document.getElementById("barcodeModal");
+        //     const barcodeModalOverlay = document.getElementById("barcodeModalOverlay");
+        //     const closeBarcodeModal = document.getElementById("closeBarcodeModal");
+        //     const scannerContainer = document.getElementById("scannerContainer");
+
+        //     let html5QrCode;
+        //     let isScannerRunning = false;
+
+        //     // ✅ Function to open scanner modal
+        //     function openBarcodeScanner() {
+        //         barcodeModal.classList.remove("hidden");
+
+        //         if (!isScannerRunning) {
+        //             html5QrCode = new Html5Qrcode("scannerContainer");
+        //             html5QrCode.start(
+        //                 { facingMode: "environment" }, // back camera
+        //                 {
+        //                     fps: 10,
+        //                     qrbox: { width: 250, height: 250 }
+        //                 },
+        //                 (decodedText) => {
+        //                     console.log("✅ Barcode Scanned:", decodedText);
+        //                     alert("Scanned Code: " + decodedText);
+
+        //                     stopBarcodeScanner(); // auto-close after scan
+        //                 },
+        //                 (errorMessage) => {
+        //                     // Ignore scan errors for continuous scanning
+        //                 }
+        //             ).then(() => {
+        //                 isScannerRunning = true;
+        //             }).catch(err => {
+        //                 console.error("Scanner failed to start:", err);
+        //             });
+        //         }
+        //     }
+
+        //     // ✅ Function to stop scanner
+        //     function stopBarcodeScanner() {
+        //         if (html5QrCode && isScannerRunning) {
+        //             html5QrCode.stop().then(() => {
+        //                 html5QrCode.clear();
+        //                 isScannerRunning = false;
+        //                 barcodeModal.classList.add("hidden");
+        //             }).catch(err => {
+        //                 console.error("Error stopping scanner:", err);
+        //             });
+        //         } else {
+        //             barcodeModal.classList.add("hidden");
+        //         }
+        //     }
+
+        //     // Close modal actions
+        //     barcodeModalOverlay.addEventListener("click", stopBarcodeScanner);
+        //     closeBarcodeModal.addEventListener("click", stopBarcodeScanner);
+
+        //     // ✅ Example: Trigger scanner with a button
+        //     document.getElementById("openScannerBtn")?.addEventListener("click", openBarcodeScanner);
+        // });
+
+        bookCards.forEach(card => {
+            card.addEventListener('click', () => {
+                // Remove previous selection
+                bookCards.forEach(c => c.classList.remove('border-primary-300', 'bg-primary-50'));
+
+                // Add selection to clicked card
+                card.classList.add('border-primary-300', 'bg-primary-50');
+
+                // Get book data
+                const bookId = card.dataset.bookId;
+                const book = bookData[bookId];
+
+                if (book) {
+                    // Update book details
+                    noSelection.classList.add('hidden');
+                    selectedBook.classList.remove('hidden');
+
+                    bookTitle.textContent = book.title;
+                    bookAuthor.textContent = book.author;
+                    bookISBN.textContent = book.isbn;
+                    bookDepartment.textContent = book.Department;
+                    bookStatus.textContent = book.status;
+                    bookStatus.className = `text-sm font-medium px-2 py-1 rounded-full ${book.statusClass}`;
+                    bookBorrowed.textContent = book.borrowed;
+                }
+            });
+        });
+
+        // Search and Filter Logic
+        const searchInput = document.getElementById('searchInput');
+        const DepartmentFilter = document.getElementById('DepartmentFilter');
+        const statusFilter = document.getElementById('statusFilter');
+
+        searchInput.addEventListener('input', filterBooks);
+        DepartmentFilter.addEventListener('change', filterBooks);
+        statusFilter.addEventListener('change', filterBooks);
+
+        function filterBooks() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const DepartmentFilter = document.getElementById('DepartmentFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+
+            bookCards.forEach(card => {
+                const title = card.querySelector('h4').textContent.toLowerCase();
+                const author = card.querySelector('p').textContent.toLowerCase();
+                const Department = card.querySelector('.text-xs.text-gray-500:first-child').textContent.toLowerCase();
+                const status = card.querySelector('.px-2.py-1').textContent.toLowerCase();
+
+                const matchesSearch = title.includes(searchTerm) || author.includes(searchTerm);
+                const matchesDepartment = !DepartmentFilter || Department.includes(DepartmentFilter.toLowerCase());
+                const matchesStatus = !statusFilter || status.includes(statusFilter.toLowerCase());
+
+                if (matchesSearch && matchesDepartment && matchesStatus) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // View Toggle Logic
+        const gridView = document.getElementById('gridView');
+        const listView = document.getElementById('listView');
+        const booksGrid = document.getElementById('booksGrid');
+
+        gridView.addEventListener('click', () => {
+            gridView.classList.add('text-primary', 'bg-primary-100');
+            gridView.classList.remove('text-gray-400');
+            listView.classList.remove('text-primary', 'bg-primary-100');
+            listView.classList.add('text-gray-400');
+
+            booksGrid.classList.remove('space-y-4');
+            booksGrid.classList.add('grid', 'grid-cols-1', 'md:grid-cols-2', 'lg:grid-cols-3', 'gap-6');
+
+            bookCards.forEach(card => {
+                card.classList.remove('flex', 'items-center', 'space-x-4');
+                card.classList.add('flex-col');
+            });
+        });
+
+        listView.addEventListener('click', () => {
+            listView.classList.add('text-primary', 'bg-primary-100');
+            listView.classList.remove('text-gray-400');
+            gridView.classList.remove('text-primary', 'bg-primary-100');
+            gridView.classList.add('text-gray-400');
+
+            booksGrid.classList.remove('grid', 'grid-cols-1', 'md:grid-cols-2', 'lg:grid-cols-3', 'gap-6');
+            booksGrid.classList.add('space-y-4');
+
+            bookCards.forEach(card => {
+                card.classList.add('flex', 'items-center', 'space-x-4');
+                card.classList.remove('flex-col');
+            });
+        });
+
+        // Add loading states for better UX
+        document.addEventListener('DOMContentLoaded', function () {
+            // Animate book cards on load
+            bookCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease-out';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 50);
+            });
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDUSHELF Library System</title>
+  <link rel="stylesheet" href="books.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="sha512-FONT_HERE" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Load Firebase Config -->
+  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-auth-compat.js"></script>
+  <script>
+    // Firebase configuration (same as your existing config)
+    const firebaseConfig = {
+      apiKey: "AIzaSyA2-ZSnxGhMSbpxR9lWipQ-JX4s8Fz3j8Q",
+      authDomain: "librarymanagement-80741.firebaseapp.com",
+      projectId: "librarymanagement-80741",
+      storageBucket: "librarymanagement-80741.firebasestorage.app",
+      messagingSenderId: "7076696675",
+      appId: "1:7076696675:web:ff0f1965ca544627ab1e56"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Get references to Firebase services
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+  </script>
+
+
+</head>
+
+<body>
+  <!-- Header Section -->
+  <header class="navbar1">
+    <h1>WELCOME <span id="username">Loading...</span></h1>
+    <p id="user-name"></p>
+  </header>
+
+  <!-- Search Section -->
+  <section class="search-section">
+    <div class="search-bar">
+      <input type="text" placeholder="Search for books, authors, or categories..." />
+      <button class="search-btn">Search</button>
+    </div>
+  </section>
+
+  <!-- Book Borrowing Section -->
+  <section class="library">
+    <h2>Available Books</h2>
+    <div class="book-grid">
+      <div class="book-card">
+        <img src="English.jpg" alt="Book 1">
+        <h3>Technical English</h3>
+        <p>by Dr S Sumant</p>
+        <a href="https://drive.google.com/file/d/1-VC2kHwNOCoX224qAkvG5jQFoebzJsdU/view?usp=drivesdk" target="_blank">
+          <button class="borrow-btn">Borrow</button>
+        </a>
+      </div>
+
+      <div class="book-card">
+        <img src="Mathematics -I.jpg" alt="Book 2">
+        <h3>Mathamatics I</h3>
+        <p>by Ravish R. Singh,Mukul Bhatt</p>
+        <a href="https://drive.google.com/file/d/1-ddZYYfsvmIm3E7MiKmiAslYi-iUBlsC/view?usp=drivesdk" target="_blank">
+          <button class="borrow-btn">Borrow</button>
+        </a>
+      </div>
+
+      <div class="book-card">
+        <img src="Mathematics -II.jpg" alt="Book 3">
+        <h3>Mathamatics II</h3>
+        <p>by C B Gupta,S R Singh,Mukesh Kumar</p>
+        <a href="https://drive.google.com/file/d/10xKqIIkyZ-hjucrGkeL5_FczrP2O13QV/view?usp=drivesdk" target="_blank">
+          <button class="borrow-btn">Borrow</button>
+        </a>
+      </div>
+
+      <div class="book-card">
+        <img src="PPs.jpg" alt="Book 4">
+        <h3>Programming For Problem Solving</h3>
+        <p>by E Balagurusamy</p>
+        <a href="https://drive.google.com/file/d/1-OEz-6EN71Dr0OnHw97kvC6klVWOS6RO/view?usp=drivesdk" target="_blank">
+          <button class="borrow-btn">Borrow</button>
+        </a>
+      </div>
+
+      <div class="book-card">
+        <img src="Es.jpg" alt="Book 5">
+        <h3>Environmental Science</h3>
+        <p>by Dr R. P. Rethaliya</p>
+        <a href="https://drive.google.com/file/d/10zaVQ5WxwC7-pvlSTIGe8T8FIlbC-_Er/view?usp=drivesdk" target="_blank">
+          <button class="borrow-btn">Borrow</button>
+        </a>
+      </div>
+
+      <div class="book-card">
+        <img src="Civil.jpg" alt="Book 6">
+        <h3>Basic Civil Engineering </h3>
+        <p>by S S Bhavikatti</p>
+        <a href="https://drive.google.com/file/d/10vc7PvMw8ibpWuHi_rGY2KxA8nRLSo84/view?usp=drivesdk" target="_blank">
+          <button class="borrow-btn">Borrow</button>
+        </a>
+      </div>
+
+      <div class="book-card">
+        <img src="EMT.jpeg" alt="Book 7">
+        <h3>Elements of Electromagnetics</h3>
+        <p>by Matthew N. O. Sadiku</p>
+        <a href="https://drive.google.com/file/d/1aC_-YUM2JkrMJaiHsWQByMcy6nIshWC4/view?usp=drive_link" target="_blank">
+          <button class="borrow-btn">Borrow</button>
+        </a>
+      </div>
+
+      <div class="book-card">
+        <img src="SAS.jpg" alt="Book 8">
+        <h3>Signal & System</h3>
+        <p>by A.Anand Kumar</p>
+        <a href="https://drive.google.com/file/d/1xpXb24DhlSBpW1rfiLJ4xpPpMJ-EEZCU/view?usp=drive_link" target="_blank">
+          <button class="borrow-btn">Borrow</button>
+        </a>
+      </div>
+
+      <div class="book-card">
+        <img src="OP-Amp.jpg" alt="Book 9">
+        <h3>Op-Amp and Linear Intrgrated Circuit</h3>
+        <p>by Ramakant A.Gayakwad</p>
+        <a href="https://drive.google.com/file/d/1Ie2dHuDzbssVMStMYb1YOgkTi_sTFau7/view?usp=drive_link" target="_blank">
+          <button class="borrow-btn">Borrow</button>
+        </a>
+
+      </div>
+      <div class="book-card">
+        <img src="PE.webp" alt="Book 10">
+        <h3>Professional Ethics</h3>
+        <a href="https://drive.google.com/file/d/1MnJHEH8oIpjSuE5rJbohnw7u-wPL1ZdN/view?usp=drive_link" target="_blank">
+          <button class="borrow-btn">Borrow</button>
+        </a>
+      </div>
+
+      <div class="book-card">
+        <img src="MPMC.jpeg" alt="Book 11">
+        <h3>AVR Microcontroller and Embedded Systems</h3>
+        <p>by Mazidi, Muhammad Ali Naimi, Sarmad Naimi, Sepehr</p>
+        <a href="https://drive.google.com/file/d/11nimO2EyNkxPiZikFR92Vd5xB6e1Ivb0/view?usp=drive_link" target="_blank">
+          <button class="borrow-btn">Borrow</button>
+        </a>
+      </div>
+
+      <div class="book-card">
+        <img src="ARM System-1.png" alt="Book 12">
+        <h3>ARM System Developers Guide</h3>
+        <p>by Andrew N. Sloss</p>
+        <a href="https://drive.google.com/file/d/1ygxFFS3RuI18h90eXe7p-4DU8wNvGOt9/view?usp=drive_link target=" _blank">
+          <button class="borrow-btn">Borrow</button>
+        </a>
+      </div>
+
+      <div class="book-card">
+        <img src="B. P. Lathi, Zhi-1.png" alt="Book 13">
+        <h3>Modern Digital and Analog Communication Systems-Oxford University Press (2009)</h3>
+        <p>by B. P. Lathi, Zhi Ding</p>
+        <a href="https://drive.google.com/file/d/1ypblyac2zv3BIydq4t0WBgUUJdmJm_rZ/view?usp=drive_link" target="_blank">
+          <button class="borrow-btn">Borrow</button>
+        </a>
+      </div>
+      <div class="book-card">
+        <img src="CMOS.png-1.png" alt="Book 14">
+        <h3>VLSI C-MOSkang</h3>
+        <p>by SUNG-MO (STEVE) ANG</p>
+        <a href="https://drive.google.com/file/d/1JOlku_PwLYnF_l00lxZptDAeZR6EOBl1/view?usp=drive_link" target="_blank">
+          <button class="borrow-btn">Borrow</button>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Us Section -->
+  <section id="aboutus" class="aboutus-section"> <!-- Add id for scrolling -->
+    <h2>About Us</h2>
+    <p>Welcome to EDUSHELF, your go-to library system for a vast collection of books across various genres. Our mission
+      is to make reading accessible to everyone. Whether you're looking for fiction, non-fiction, or academic resources,
+      EDUSHELF has something for every reader.</p>
+  </section>
+
+  <!-- Help Section -->
+  <section id="help" class="help-section"> <!-- Add id for scrolling -->
+    <h2>Help</h2>
+    <p>If you need any help or assistance, feel free to contact us at <a
+        href="mailto:info@edushelf.com">info@edushelf.com</a>. We're here to assist you with any issues you encounter.
+    </p>
+  </section>
+
+  <!-- Footer Section -->
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+    </div>
+    <p>&copy; 2024 EDUSHELF. All rights reserved.</p>
+  </footer>
+
+  <!-- Navigation Bar -->
+  <nav class="sidebar">
+    <ul class="nav-icons">
+      <li class="nav-item active" onclick="setActive(this)"><a href="books.html"><i class="fas fa-th"></a></i></li>
+      <li class="nav-item" onclick="setActive(this)"><a href="index.html"><i class="fas fa-user"></i></a></li>
+      <li class="nav-item" onclick="setActive(this)"><i class="fas fa-bell"></i></li>
+      <li class="nav-item" onclick="setActive(this)"><i class="fas fa-cog"></i></li>
+    </ul>
+    <!-- Search Bar function -->
+    <script>
+      const searchInput = document.querySelector('.search-bar input');
+      const bookCards = document.querySelectorAll('.book-card');
+
+      searchInput.addEventListener('input', function () {
+        const query = this.value.trim().toLowerCase();
+
+        bookCards.forEach(card => {
+          const title = card.querySelector('h3')?.innerText.toLowerCase() || "";
+          const author = card.querySelector('p')?.innerText.toLowerCase() || "";
+
+          // Combine title and author for better search
+          const combinedText = `${title} ${author}`;
+
+          if (combinedText.includes(query)) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+      function setActive(element) {
+        const items = document.querySelectorAll('.nav-item');
+        items.forEach(item => item.classList.remove('active'));
+        element.classList.add('active');
+      }
+    </script>
+
+    <!-- chatbot -->
+    <div id="chatbot-toggle" class="chatbot-toggle">
+      <div class="toggle-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" />
+        </svg>
+      </div>
+      <div class="notification-dot" id="notification-dot"></div>
+    </div>
+
+    <!-- Chatbot Container -->
+    <div id="chatbot-container" class="chatbot-container">
+      <!-- Header -->
+      <div class="chatbot-header">
+        <div class="chatbot-avatar">
+          <img
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%234F46E5'/%3E%3Ctext x='50' y='60' text-anchor='middle' fill='white' font-size='40' font-family='Arial'%3E🤖%3C/text%3E%3C/svg%3E"
+            alt="EDUSHELF AI">
+        </div>
+        <div class="chatbot-info">
+          <h3>Jarvis AI</h3>
+          <span class="status online">Online</span>
+        </div>
+        <div class="chatbot-actions">
+          <button id="minimize-btn" class="action-btn">─</button>
+          <button id="close-btn" class="action-btn">✕</button>
+        </div>
+      </div>
+
+      <!-- Welcome Screen -->
+      <div id="welcome-screen" class="welcome-screen">
+        <div class="welcome-content">
+          <div class="welcome-avatar">
+            🤖
+          </div>
+          <h2>Hi! I'm your JARVIS AI</h2>
+          <p>I can help you with:</p>
+          <ul class="feature-list">
+            <li>📚 Finding books in our library</li>
+            <li>🔍 Book recommendations by subject</li>
+            <li>📖 Detailed information about any book</li>
+            <li>🎓 Study tips and guidance</li>
+            <li>🧭 Navigating the EDUSHELF system</li>
+          </ul>
+          <button id="start-chat-btn" class="start-chat-btn">Start Chatting</button>
+        </div>
+      </div>
+
+      <!-- Chat Interface -->
+      <div id="chat-interface" class="chat-interface" style="display: none;">
+        <!-- Messages Area -->
+        <div id="messages-container" class="messages-container">
+          <!-- Messages will be dynamically added here -->
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <button class="quick-btn" data-message="Show me all available books">📚 All Books</button>
+          <button class="quick-btn" data-message="I need help with mathematics">🔢 Mathematics</button>
+          <button class="quick-btn" data-message="Programming books">💻 Programming</button>
+          <button class="quick-btn" data-message="Study tips">📝 Study Tips</button>
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-area">
+          <div class="input-container">
+            <input type="text" id="message-input" placeholder="Ask me anything about EDUSHELF books..." maxlength="500">
+            <button id="send-btn" class="send-btn">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+              </svg>
+            </button>
+          </div>
+          <div class="input-footer">
+            <span class="char-count">0/500</span>
+            <span class="powered-by">Powered by EDUSHELF AI</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      auth.onAuthStateChanged(user => {
+        if (user) {
+          const userId = user.uid;
+          db.collection("users").doc(userId).get()
+            .then(doc => {
+              if (doc.exists) {
+                const name = doc.data().name || "User";
+                document.getElementById("username").innerText = name.toUpperCase();
+              } else {
+                document.getElementById("username").innerText = "User";
+              }
+            })
+            .catch(error => {
+              console.error("Error getting user data:", error);
+            });
+        } else {
+          document.getElementById("username").innerText = "Guest";
+        }
+      });
+    </script>
+
+
+    <!-- Load Chatbot Script -->
+    <script src="chatbot.js"></script>
+
+
+</body>
+
+</html>
